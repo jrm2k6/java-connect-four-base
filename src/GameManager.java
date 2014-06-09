@@ -27,10 +27,15 @@ public class GameManager {
             int teamNumberPlaying = roundManager.getTeamNumberPlaying() - 1;
             int columnClicked = Integer.parseInt(clickedPanel.getName().split("_")[1]);
             Point positionToModify = boardChips.findSpot(columnClicked);
-            boardChips.addChip(new Chip(positionToModify.x, positionToModify.y), teamNumberPlaying);
-            boardView.updateTile(positionToModify, State.values()[teamNumberPlaying].getColor());
 
-            roundManager.nextTurn();
+            if (positionToModify.x > -1) {
+                Chip newChip = new Chip(positionToModify.x, positionToModify.y);
+                boardChips.addChip(newChip, teamNumberPlaying);
+                boardChips.updateConnections(newChip);
+                boardView.updateTile(positionToModify, State.values()[teamNumberPlaying].getColor());
+                roundManager.nextTurn();
+            }
+
         }
 
         @Override

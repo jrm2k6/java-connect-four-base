@@ -6,6 +6,7 @@ import java.awt.*;
 public class Chip {
     public int x;
     public int y;
+    public Chip[] connections = new Chip[8];
     public State state;
 
     public Chip(int x, int y)
@@ -17,5 +18,9 @@ public class Chip {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public void updateConnection(Chip chip) {
+
     }
 }
