@@ -47,7 +47,8 @@ public class BoardModel {
     }
 
     public void updateConnections(Chip newChip) {
-//        newChip.updateConnection();
+        ArrayList<Chip> neighbors = getNeighbors(newChip);
+        newChip.updateConnections(neighbors);
     }
 
     private ArrayList<Chip> getNeighbors(Chip chip) {
