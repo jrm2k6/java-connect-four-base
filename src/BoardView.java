@@ -56,4 +56,8 @@ public class BoardView extends JFrame{
         int position = positionToModify.x * 7 + positionToModify.y;
         panelTiles.get(position).setBackground(color);
     }
+
+    public void showWinningOverlay(State state) {
+        JOptionPane.showMessageDialog(this, "We have a winner!\n Team " + state.getColor() );
+    }
 }

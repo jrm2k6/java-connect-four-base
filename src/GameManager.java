@@ -10,12 +10,13 @@ public class GameManager {
     private BoardModel boardChips;
     private BoardView boardView;
     private RoundManager roundManager;
+    private WinDetector winDetector;
 
     public GameManager(BoardModel boardChips, BoardView boardView, RoundManager roundManager) {
         this.boardChips = boardChips;
         this.boardView = boardView;
         this.roundManager = roundManager;
-
+        this.winDetector = new WinDetector(boardChips);
         this.boardView.attachMouseListener(new GridMouseListener());
     }
 
@@ -33,7 +34,12 @@ public class GameManager {
                 boardChips.addChip(newChip, teamNumberPlaying);
                 boardChips.updateConnections(newChip);
                 boardView.updateTile(positionToModify, State.values()[teamNumberPlaying].getColor());
-                roundManager.nextTurn();
+
+                if (winDetector.checkIfWinner(newChip)) {
+                    boardView.showWinningOverlay(newChip.state);
+                } else {
+                    roundManager.nextTurn();
+                }
             }
 
         }
