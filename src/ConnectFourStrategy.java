@@ -3,4 +3,5 @@
  */
 public interface ConnectFourStrategy {
     public int getNextMove();
+    public void onColumnFullEventReceived(int index);
 }

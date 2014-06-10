@@ -15,8 +15,10 @@ public class RandomStrategy implements ConnectFourStrategy {
         }
     }
 
-    public void removeColumn(int columnIndex) {
-        availableColumns.remove(new Integer(columnIndex));
+    public void onColumnFullEventReceived(int columnIndex) {
+        if (availableColumns.contains(new Integer(columnIndex))) {
+            availableColumns.remove(new Integer(columnIndex));
+        }
     }
 
     public int getRandomColumn() {
