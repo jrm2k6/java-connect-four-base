@@ -7,10 +7,12 @@ import java.awt.event.MouseListener;
  * Created by jrm2k6 on 6/9/14.
  */
 public class GameManager {
+    private ColumnFullEventDispatcher columnFullEventDispatcher;
     private BoardModel boardChips;
     private BoardView boardView;
     private RoundManager roundManager;
     private WinDetector winDetector;
+    private Opponent opponent;
 
     public GameManager(BoardModel boardChips, BoardView boardView, RoundManager roundManager) {
         this.boardChips = boardChips;
@@ -18,6 +20,12 @@ public class GameManager {
         this.roundManager = roundManager;
         this.winDetector = new WinDetector(boardChips);
         this.boardView.attachMouseListener(new GridMouseListener());
+        this.columnFullEventDispatcher = new ColumnFullEventDispatcher();
+    }
+
+    public void setOpponent(Opponent opponent) {
+        this.opponent = opponent;
+        this.columnFullEventDispatcher.addEventListener(this.opponent);
     }
 
     private class GridMouseListener implements MouseListener {
@@ -40,6 +48,8 @@ public class GameManager {
                 } else {
                     roundManager.nextTurn();
                 }
+            } else {
+                columnFullEventDispatcher.dispatchEvent(new ColumnFullEvent(this, columnClicked));
             }
 
         }
