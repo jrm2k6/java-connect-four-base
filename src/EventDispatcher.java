@@ -4,8 +4,8 @@ import java.util.EventObject;
 /**
  * Created by jrm2k6 on 6/10/14.
  */
-public interface EventDispatcher<TEvent> {
+public interface EventDispatcher {
     public void addEventListener(EventListener listener);
     public void removeEventListener(EventListener listener);
-    public void dispatchEvent(TEvent event);
+    public void dispatchEvent(EventObject event);
 }
