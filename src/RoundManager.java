@@ -9,7 +9,7 @@ public class RoundManager {
         this.teamNumberPlaying = 1;
     }
 
-    public void nextTurn() {
+    public void updateTeamPlayinNextRound() {
         teamNumberPlaying = (teamNumberPlaying == 1)? 2 : 1;
     }
 
