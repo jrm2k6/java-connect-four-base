@@ -27,8 +27,8 @@ public class RandomStrategy implements ConnectFourStrategy {
     }
 
     @Override
-    public void onRoundEventReceived(int teamNumber) {
-        if (teamNumber == this.teamNumber) {
+    public void onRoundEventReceived(RoundEvent event) {
+        if (event.getTeamNumber() == this.teamNumber) {
             this.eventDispatcher.dispatchEvent(new MoveEvent(this, this.getNextMove()));
         }
     }

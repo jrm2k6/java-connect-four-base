@@ -48,7 +48,7 @@ public class GameManager implements MoveEventListener {
                 boardView.showWinningOverlay(newChip.state);
             } else {
                 roundManager.updateTeamPlayinNextRound();
-                connectFourEventDispatcher.dispatchEvent(new RoundEvent(this, roundManager.getTeamNumberPlaying()));
+                connectFourEventDispatcher.dispatchEvent(new RoundEvent(this, positionToModify, roundManager.getTeamNumberPlaying()));
 
             }
         } else {

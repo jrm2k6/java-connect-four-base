@@ -15,6 +15,6 @@ public class Opponent implements ColumnFullEventListener, RoundEventListener{
 
     @Override
     public void roundEventReceived(RoundEvent event) {
-        this.strategy.onRoundEventReceived(event.getTeamNumber());
+        this.strategy.onRoundEventReceived(event);
     }
 }
