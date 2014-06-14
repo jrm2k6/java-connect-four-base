@@ -16,8 +16,10 @@ public class WinDetector {
         for (int i=0; i<ChipRelationship.values().length/2; i++) {
             ChipRelationship t = ChipRelationship.values()[i];
             ChipRelationship opposite = t.getOpposite();
-            int nbInARow = checkDirection(chip, t, 0, chip.state) + checkDirection(chip, opposite, 0, chip.state);
-            if (nbInARow > 4) {
+            int nbInARowCurrentDirection = checkDirection(chip, t, 0, chip.state);
+            int nbInARowOppositeDirection = checkDirection(chip, opposite, 0, chip.state);
+            int nbInARow = nbInARowCurrentDirection + nbInARowOppositeDirection;
+            if (nbInARowCurrentDirection == 4 || nbInARowOppositeDirection == 4 ||nbInARow > 4) {
                 return true;
             }
         }
