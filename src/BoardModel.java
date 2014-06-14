@@ -6,13 +6,15 @@ import java.util.ArrayList;
  */
 public class BoardModel {
     private Chip[][] chips;
-    private int dimension;
+    private int numberRows;
+    private int numberColumns;
     private int nbChipsPlayed = 0;
 
-    public BoardModel(int dimension)
+    public BoardModel(int numberRows, int numberColumns)
     {
-        this.dimension = dimension;
-        this.chips = new Chip[dimension][dimension];
+        this.numberRows = numberRows;
+        this.numberColumns = numberColumns;
+        this.chips = new Chip[numberRows][numberColumns];
     }
 
     public void addChip(Chip chip, int teamNumber) {
@@ -33,7 +35,7 @@ public class BoardModel {
 
     public Point findSpot(int columnClicked)
     {
-        for (int i=this.dimension-1; i>=0; i--) {
+        for (int i=this.numberRows -1; i>=0; i--) {
             if (chips[i][columnClicked] == null) {
                 return new Point(i, columnClicked);
             }
@@ -75,8 +77,8 @@ public class BoardModel {
     }
 
     private boolean inBounds(Point position) {
-        return position.x < dimension
-                && position.y < dimension
+        return position.x < numberRows
+                && position.y < numberColumns
                 && position.x > -1
                 && position.y > -1;
     }

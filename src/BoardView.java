@@ -7,17 +7,19 @@ import java.util.ArrayList;
  * Created by jrm2k6 on 6/8/14.
  */
 public class BoardView extends JFrame{
-    private final int dimension;
+    private final int numberColumns;
+    private final int numberRows;
 
     // 0 base-indexed
     ArrayList<JPanel> panelTiles = new ArrayList<JPanel>();
 
     JPanel panel;
 
-    public BoardView(int dimension) {
+    public BoardView(int numberRows, int numberColumns) {
         super();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.dimension = dimension;
+        this.numberColumns = numberColumns;
+        this.numberRows = numberRows;
         create();
         display();
     }
@@ -29,10 +31,10 @@ public class BoardView extends JFrame{
 
     private void create() {
         panel = new JPanel();
-        panel.setLayout(new GridLayout(dimension, dimension));
+        panel.setLayout(new GridLayout(numberRows, numberColumns));
 
-        for (int i=0; i<dimension; i++) {
-            for (int j=0; j<dimension; j++) {
+        for (int i=0; i< numberRows; i++) {
+            for (int j=0; j< numberColumns; j++) {
                 JPanel panelTile = new JPanel();
                 panelTile.setPreferredSize(new Dimension(200, 200));
                 panelTile.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -53,7 +55,7 @@ public class BoardView extends JFrame{
     }
 
     public void updateTile(Point positionToModify, Color color) {
-        int position = positionToModify.x * 7 + positionToModify.y;
+        int position = positionToModify.x * this.numberColumns + positionToModify.y;
         panelTiles.get(position).setBackground(color);
     }
 
