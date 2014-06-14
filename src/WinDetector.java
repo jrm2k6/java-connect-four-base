@@ -9,7 +9,7 @@ public class WinDetector {
     }
 
     public boolean checkIfWinner(Chip chip) {
-        if (boardModel.getNumberChipsPlayed() < 8) {
+        if (boardModel.getNumberChipsPlayed() < 6) {
             return false;
         }
 
@@ -19,7 +19,7 @@ public class WinDetector {
             int nbInARowCurrentDirection = checkDirection(chip, t, 0, chip.state);
             int nbInARowOppositeDirection = checkDirection(chip, opposite, 0, chip.state);
             int nbInARow = nbInARowCurrentDirection + nbInARowOppositeDirection;
-            if (nbInARowCurrentDirection == 4 || nbInARowOppositeDirection == 4 ||nbInARow > 4) {
+            if (nbInARowCurrentDirection == 4 || nbInARowOppositeDirection == 4 || nbInARow > 4) {
                 return true;
             }
         }
