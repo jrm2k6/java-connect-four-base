@@ -4,5 +4,5 @@
 public interface ConnectFourStrategy {
     public int getNextMove();
     public void onColumnFullEventReceived(int index);
-    public void onRoundEventReceived(int teamNumber);
+    public void onRoundEventReceived(RoundEvent event);
 }

@@ -53,7 +53,7 @@ public class BoardModel {
         newChip.updateConnections(neighbors);
     }
 
-    private ArrayList<Chip> getNeighbors(Chip chip) {
+    public ArrayList<Chip> getNeighbors(Chip chip) {
         ArrayList<Chip> neighbors = new ArrayList<Chip>();
         // going clockwise - top - top right - right - .... - top left
         neighbors.add(getChipAtPosition(ChipRelationShipHelper.getPositionToCheck(chip, ChipRelationship.TOP_NEIGHBOR)));
@@ -68,7 +68,7 @@ public class BoardModel {
         return neighbors;
     }
 
-    private Chip getChipAtPosition(Point position) {
+    public Chip getChipAtPosition(Point position) {
         if (inBounds(position)) {
             return chips[position.x][position.y];
         } else {
@@ -81,5 +81,9 @@ public class BoardModel {
                 && position.y < numberColumns
                 && position.x > -1
                 && position.y > -1;
+    }
+
+    public Chip[][] getChips() {
+        return chips;
     }
 }

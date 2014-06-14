@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Created by jrm2k6 on 6/9/14.
  */
-public class Chip {
+public class Chip implements Cloneable {
     public int x;
     public int y;
     public Chip[] connections = new Chip[8];
@@ -35,5 +35,9 @@ public class Chip {
         if (chip != null && crossUpdate) {
             chip.updateConnection(this, ((index+4)%8), false);
         }
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
