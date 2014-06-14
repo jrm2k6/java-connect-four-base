@@ -75,11 +75,7 @@ public class DefensiveStrategy implements ConnectFourStrategy {
     }
 
     private boolean isMinimalDistanceRespected(int r, int c) {
-        if (r == 5 || boardModel.getChipAtPosition(new Point(r+1, c)) != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return (r == 5 || boardModel.getChipAtPosition(new Point(r+1, c)) != null);
     }
 
     private int checkScoreIfOpponentPlaysNextTime(Chip chip) {
