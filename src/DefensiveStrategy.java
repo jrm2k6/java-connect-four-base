@@ -39,11 +39,11 @@ public class DefensiveStrategy implements ConnectFourStrategy {
     public int findMostDangerousSpotForOpponent() {
         HashMap<Integer, Integer> mappingScoreColumn = new HashMap<Integer, Integer>();
         if (boardModel.getNumberChipsPlayed() < 5) {
-            return new Random().nextInt(boardModel.getChips().length);
+            return new Random().nextInt(boardModel.getNumberRows());
         }
 
-        for (int r=0; r<boardModel.getChips().length; r++) {
-            for (int c=0; c<boardModel.getChips()[r].length; c++) {
+        for (int r=0; r<boardModel.getNumberRows(); r++) {
+            for (int c=0; c<boardModel.getNumberColumns(); c++) {
                 if (isMinimalDistanceRespected(r,c)) {
                     Chip chip = boardModel.getChipAtPosition(new Point(r, c));
                     if (chip == null) {
