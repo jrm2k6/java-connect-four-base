@@ -133,5 +133,23 @@ public class BoardModel implements Cloneable {
 
     public void setChips(Chip[][] chips) {
         this.chips = chips;
+        for (int i=0; i<chips.length; i++) {
+            for (int j=0; j<chips[i].length; j++) {
+                if (chips[i][j] != null) nbChipsPlayed++;
+            }
+        }
+    }
+
+    public int getNumberChipsForTeam(State state) {
+        int result = 0;
+        for (int i=0; i<chips.length; i++) {
+            for (int j=0; j<chips[i].length; j++) {
+                if (chips[i][j] != null && chips[i][j].state == state) {
+                    result++;
+                }
+            }
+        }
+
+        return result;
     }
 }
