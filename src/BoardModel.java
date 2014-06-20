@@ -152,4 +152,15 @@ public class BoardModel implements Cloneable {
 
         return result;
     }
+
+    public void updateBoardConnections() {
+        for (int i=0; i<this.getNumberRows(); i++) {
+            for (int j=0; j<this.getNumberColumns();j++) {
+                Chip chip = this.getChipAtPosition(new Point(i, j));
+                if (chip != null) {
+                    this.updateConnections(chip);
+                }
+            }
+        }
+    }
 }

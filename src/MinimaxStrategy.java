@@ -12,6 +12,7 @@ public class MinimaxStrategy implements ConnectFourStrategy {
     private ConnectFourEventDispatcher eventDispatcher;
     private BoardModel boardChips;
     private int teamNumber;
+    private HashMap<Integer, Integer> columnScoresMap;
 
     public MinimaxStrategy(BoardModel boardChips, int teamNumber, ConnectFourEventDispatcher eventDispatcher) {
         this.boardChips = boardChips;
@@ -21,16 +22,10 @@ public class MinimaxStrategy implements ConnectFourStrategy {
 
     @Override
     public int getNextMove() {
-        HashMap<Integer, Integer> columnWithScore = new HashMap<Integer, Integer>();
-            ArrayList<Integer> availableColumns = getAvailableColumns(boardChips);
-            for (int columnToPlay : availableColumns) {
-                BoardModel clonedBoard =  cloneBoardChips();
-                System.out.println(boardChips.getNumberChipsPlayed());
-                Point scoreForColumn = runMinimax(clonedBoard, 8, true, columnToPlay);
-                columnWithScore.put(scoreForColumn.x, scoreForColumn.y);
-            }
-
-        ArrayList<Integer> candidates = filterColumnWithScoresByMaximumScore(columnWithScore);
+        columnScoresMap = new HashMap<Integer, Integer>();
+        BoardModel clonedBoard =  cloneBoardChips(boardChips);
+        minimax(clonedBoard, 4, true, true, -1);
+        ArrayList<Integer> candidates = filterColumnWithScoresByMaximumScore(columnScoresMap);
         if (candidates.size() == 1) {
             return candidates.get(0);
         } else {
@@ -39,11 +34,36 @@ public class MinimaxStrategy implements ConnectFourStrategy {
         }
     }
 
+    private void minimax(BoardModel boardChips, int depth, boolean maximizingPlayer, boolean initialCall, int initialColumn) {
+        if (depth == 0) {
+            // ONLY FOR DEBUG
+            //MinimaxView view = new MinimaxView(boardChips.getChips());
+            int score = calculateScore(initialColumn, boardChips).y;
+            columnScoresMap.put(initialColumn, calculateScore(initialColumn, boardChips).y);
+        } else {
+            for (int i=0; i< boardChips.getNumberColumns(); i++) {
+                if (!boardChips.isColumnFull(i)) {
+                    if (initialCall) initialColumn = i;
+                    BoardModel currentModel = cloneBoardChips(boardChips);
+                    int teamNumberPlaying = (maximizingPlayer) ? this.teamNumber : this.teamNumber - 1;
+                    Chip newChip = currentModel.addChip(i, teamNumberPlaying-1);
+                    if (newChip != null) {
+                        currentModel.updateConnections(newChip);
+                    }
+
+                    BoardModel clone = cloneBoardChips(currentModel);
+                    minimax(clone, depth-1, !maximizingPlayer, false, initialColumn);
+                }
+            }
+        }
+    }
+
     private ArrayList<Integer> filterColumnWithScoresByMaximumScore(HashMap<Integer, Integer> columnWithScore) {
         ArrayList<Integer> candidates = new ArrayList<Integer>();
         Map.Entry<Integer, Integer> maximumEntry = null;
 
         for (Map.Entry<Integer, Integer> item : columnWithScore.entrySet()) {
+            System.out.println(item.getKey() + " score is " + item.getValue());
             if (maximumEntry == null) {
                 maximumEntry = item;
                 candidates.add(maximumEntry.getKey());
@@ -51,6 +71,7 @@ public class MinimaxStrategy implements ConnectFourStrategy {
                 maximumEntry = item;
                 candidates.clear();
                 candidates.add(maximumEntry.getKey());
+                System.out.println("SCORE IS " + item.getValue());
             } else if (item.getValue().compareTo(maximumEntry.getValue()) == 0){
                 candidates.add(item.getKey());
             }
@@ -59,12 +80,12 @@ public class MinimaxStrategy implements ConnectFourStrategy {
         return candidates;
     }
 
-    private BoardModel cloneBoardChips() {
-        BoardModel cloneModel = new BoardModel(boardChips.getNumberRows(), boardChips.getNumberColumns());
-        Chip[][] copyChips = new Chip[boardChips.getNumberRows()][boardChips.getNumberColumns()];
-        for (int i=0; i<boardChips.getNumberRows(); i++) {
-            for (int j=0; j<boardChips.getNumberRows(); j++) {
-                Chip originalChip = boardChips.getChipAtPosition(new Point(i, j));
+    private BoardModel cloneBoardChips(BoardModel modelToClone) {
+        BoardModel cloneModel = new BoardModel(modelToClone.getNumberRows(), modelToClone.getNumberColumns());
+        Chip[][] copyChips = new Chip[modelToClone.getNumberRows()][modelToClone.getNumberColumns()];
+        for (int i=0; i<modelToClone.getNumberRows(); i++) {
+            for (int j=0; j<modelToClone.getNumberColumns(); j++) {
+                Chip originalChip = modelToClone.getChipAtPosition(new Point(i, j));
                 if (originalChip == null) {
                     copyChips[i][j] = null;
                 } else {
@@ -73,6 +94,9 @@ public class MinimaxStrategy implements ConnectFourStrategy {
                 }
             }
         }
+
+        cloneModel.setChips(copyChips);
+        cloneModel.updateBoardConnections();
 
         return cloneModel;
     }
@@ -90,17 +114,22 @@ public class MinimaxStrategy implements ConnectFourStrategy {
         }
     }
 
-    private Point runMinimax(BoardModel boardModel, int depth, boolean maximizingPlayer, int columnPlayed) {
-        if (depth == 0) {
-            return calculateScore(columnPlayed, boardModel);
-        } else {
-            int teamNumberPlaying = (maximizingPlayer) ? this.teamNumber : this.teamNumber - 1;
-            Chip newChip = boardModel.addChip(columnPlayed, teamNumberPlaying-1);
-            if (newChip != null) {
-                boardModel.updateConnections(newChip);
-            }
-            return runMinimax(boardModel, depth-1, !maximizingPlayer, columnPlayed);
-        }
+    private Point runMinimax(BoardModel boardModel, int depth, boolean maximizingPlayer, int columnPlayed, BoardView minimaxView) {
+//        if (depth == 0) {
+//            return calculateScore(columnPlayed, boardModel);
+//        } else {
+//            int teamNumberPlaying = (maximizingPlayer) ? this.teamNumber : this.teamNumber - 1;
+//            Chip newChip = boardModel.addChip(columnPlayed, teamNumberPlaying-1);
+//            if (newChip != null) {
+//                minimaxView.updateTile(new Point(newChip.x, newChip.y), newChip.state.getColor());
+//                boardModel.updateConnections(newChip);
+//            }
+//            for (int column : getAvailableColumns(boardModel)) {
+//                Point score = runMinimax(cloneBoardChips(minimaxView, boardModel), depth-1, !maximizingPlayer, column, minimaxView);
+//            }
+//        }
+
+        return new Point(0, 0);
     }
 
     private Point calculateScore(int columnPlayed, BoardModel boardModel) {
@@ -119,6 +148,12 @@ public class MinimaxStrategy implements ConnectFourStrategy {
         int nbLosingSituations = findNumberChipsInARowFor(4, boardModel, stateChipOpponent);
         int nbTripleInARowOpponent = findNumberChipsInARowFor(3, boardModel, stateChipOpponent);
         int nbDoubleInARowOpponent = findNumberChipsInARowFor(2, boardModel, stateChipOpponent);
+
+        System.out.println("Score checking " +
+        "winning " + nbWinningSituations + " " + nbTripleInARow + " " + nbDoubleInARow);
+
+        System.out.println("Score checking " +
+                "losing " + nbLosingSituations + " " + nbTripleInARowOpponent + " " + nbDoubleInARowOpponent);
 
         return new Point(columnPlayed, (nbWinningSituations * SCORE_WINNING +
                 nbLosingSituations * SCORE_LOSING +

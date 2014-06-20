@@ -37,6 +37,10 @@ public class Chip implements Cloneable {
         }
     }
 
+    public void setConnections(Chip[] _connections) {
+        this.connections = _connections;
+    }
+
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
