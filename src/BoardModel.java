@@ -58,10 +58,13 @@ public class BoardModel implements Cloneable {
 
     public Point findSpot(int columnClicked)
     {
-        for (int i=this.numberRows -1; i>=0; i--) {
-            if (chips[i][columnClicked] == null) {
-                return new Point(i, columnClicked);
+        if (columnClicked != -1) {
+            for (int i=this.numberRows -1; i>=0; i--) {
+                if (chips[i][columnClicked] == null) {
+                    return new Point(i, columnClicked);
+                }
             }
+
         }
 
         return new Point(-1, -1);
