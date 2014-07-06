@@ -182,8 +182,8 @@ public class MinimaxStrategy implements ConnectFourStrategy {
         for (int i=0; i<ChipRelationship.values().length/2; i++) {
             ChipRelationship t = ChipRelationship.values()[i];
             ChipRelationship opposite = t.getOpposite();
-            int nbInARowCurrentDirection = checkDirection(chipToCheck, t, 0, state);
-            int nbInARowOppositeDirection = checkDirection(chipToCheck, opposite, 0, state);
+            int nbInARowCurrentDirection = strategyHelper.checkDirection(chipToCheck, t, 0, state);
+            int nbInARowOppositeDirection = strategyHelper.checkDirection(chipToCheck, opposite, 0, state);
             int nbInARow = nbInARowCurrentDirection + nbInARowOppositeDirection;
             if (nbInARowCurrentDirection == nbInARowToCheck || nbInARowOppositeDirection == nbInARowToCheck || nbInARow > nbInARowToCheck) {
                 result++;
@@ -191,25 +191,5 @@ public class MinimaxStrategy implements ConnectFourStrategy {
         }
 
         return result;
-    }
-
-    private ArrayList<Integer> getAvailableColumns(BoardModel boardModel) {
-        ArrayList<Integer> results = new ArrayList<Integer>();
-        for (int i=0; i<boardModel.getNumberColumns(); i++) {
-            if (!boardModel.isColumnFull(i)) {
-                results.add(i);
-            }
-        }
-
-        return results;
-    }
-
-    public int checkDirection(Chip chip, ChipRelationship direction, int nbSameColorInARow, State initialState) {
-        if (chip == null || chip.state != initialState) {
-            return nbSameColorInARow;
-        } else {
-            Chip neighbor = chip.connections[direction.ordinal()];
-            return checkDirection(neighbor, direction, nbSameColorInARow + 1, initialState);
-        }
     }
 }
