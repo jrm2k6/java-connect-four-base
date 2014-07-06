@@ -9,28 +9,48 @@ import java.util.Random;
  */
 public class MinimaxStrategy implements ConnectFourStrategy {
 
+    private final StrategyHelper strategyHelper;
     private ConnectFourEventDispatcher eventDispatcher;
     private BoardModel boardChips;
     private int teamNumber;
     private HashMap<Integer, Integer> columnScoresMap;
 
-    public MinimaxStrategy(BoardModel boardChips, int teamNumber, ConnectFourEventDispatcher eventDispatcher) {
+    public MinimaxStrategy(BoardModel boardChips, int teamNumber, StrategyHelper strategyHelper, ConnectFourEventDispatcher eventDispatcher) {
         this.boardChips = boardChips;
         this.teamNumber = teamNumber;
         this.eventDispatcher = eventDispatcher;
+        this.strategyHelper = strategyHelper;
     }
 
     @Override
     public int getNextMove() {
         columnScoresMap = new HashMap<Integer, Integer>();
         BoardModel clonedBoard =  cloneBoardChips(boardChips);
-        minimax(clonedBoard, 4, true, true, -1);
-        ArrayList<Integer> candidates = filterColumnWithScoresByMaximumScore(columnScoresMap);
-        if (candidates.size() == 1) {
-            return candidates.get(0);
-        } else {
-            int randomIndex = new Random().nextInt(candidates.size());
-            return candidates.get(randomIndex);
+        if (boardChips.getNumberChipsPlayed() == 1) {
+            int columnToPlay = strategyHelper.playNextToChipIfExists(boardChips);
+            return columnToPlay;
+        } else if (findNumberChipsInARowFor(3, boardChips, State.PLAYED_TEAM_2) >= 3)
+        {
+            int columnToPlay = strategyHelper.findMostDangerousSpotForOpponent(boardChips, State.PLAYED_TEAM_2);
+            return columnToPlay;
+        }
+        else if (findNumberChipsInARowFor(3, boardChips, State.PLAYED_TEAM_1) >= 3)
+        {
+            int columnToPlay =  strategyHelper.findMostDangerousSpotForOpponent(boardChips, State.PLAYED_TEAM_1);
+            return columnToPlay;
+        }
+        else
+        {
+            minimax(clonedBoard, 4, true, true, -1);
+            ArrayList<Integer> candidates = filterColumnWithScoresByMaximumScore(columnScoresMap);
+            if (candidates.size() == 0) {
+                return -1;
+            } else if (candidates.size() == 1) {
+                return candidates.get(0);
+            } else {
+                int randomIndex = new Random().nextInt(candidates.size());
+                return candidates.get(randomIndex);
+            }
         }
     }
 
